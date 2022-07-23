@@ -30,7 +30,7 @@ After `VyOS Router` is installed, you can add your device from Home Assistant UI
 
 To connect to the device you need to provide the following data:
 
-- **url** this include `https://` protocal and port number `:port`, for instance `https://192.168.1.1:11123`
+- **url** this include `https://` protocol and port number `:port`, for instance `https://192.168.1.1:11123`
 - **api_key** the key that you set from VyOS doc `MY-HTTPS-API-PLAINTEXT-KEY`
 - **verify_ssl** whether to use an SSL connection
 - **tracker_interfaces** this is optional, you can use comma `,` to specify multiple interface, for example `eth0,eth1,wlan0`. If you leave it empty, it'll use all interfaces.
