@@ -75,7 +75,10 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         KEY_COORDINATOR: coordinator,
     }
 
-    await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
+    try:
+        await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
+    except:
+        hass.config_entries.async_setup_platforms(config_entry, PLATFORMS)
 
     update_listener = config_entry.add_update_listener(async_update_options)
     hass.data[DOMAIN][config_entry.entry_id][UPDATE_LISTENER] = update_listener
