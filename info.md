@@ -1,7 +1,3 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![License](https://img.shields.io/github/license/Vaskivskyi/ha-asusrouter.svg?style=for-the-badge&color=yellow)](LICENSE)
-![GitHub all releases](https://img.shields.io/github/downloads/zen3515/homeassistant-vyos-router/total?style=for-the-badge&logo=appveyor)
-
 # homeassistant-vyos-router
 
 `VyOS Rounter` is a custom integration for Homeassistant which provides `Presence detection` as `device_tracker` functionality for VyOS Router. This integration uses direct [HTTP-API](https://docs.vyos.io/en/latest/configuration/service/https.html) from VyOS Router.

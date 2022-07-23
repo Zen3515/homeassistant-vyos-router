@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up VyOS Router",
+        "data": {
+          "url": "VyOS API url (needs https:// and port)",
+          "api_key": "Api key",
+          "verify_ssl": "Use SSL",
+          "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
+          "detection_time": "Consider home interval (seconds)"
+        }
+      }
+    },
+    "error": {},
+    "abort": {
+      "already_configured": "Already Configured"
+    }
+  }
+}

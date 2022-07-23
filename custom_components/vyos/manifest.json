@@ -1,0 +1,15 @@
+{
+  "domain": "vyos",
+  "name": "VyOS Router",
+  "version": "2022.7.1",
+  "config_flow": true,
+  "documentation": "https://www.github.com/zen3515/homeassistant-vyos-router",
+  "requirements": [],
+  "codeowners": [
+    "@zen3515"
+  ],
+  "iot_class": "local_polling",
+  "loggers": [
+    "vyos"
+  ]
+}

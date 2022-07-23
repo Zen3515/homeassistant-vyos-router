@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up VyOS Router",
+        "data": {
+          "url": "VyOS API [%key:common::config_flow::data::url%]",
+          "api_key": "[%key:common::config_flow::data::api_key%]",
+          "verify_ssl": "[%key:common::config_flow::data::verify_ssl%]",
+          "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
+          "detection_time": "Consider home interval (seconds)"
+        }
+      }
+    },
+    "error": {},
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  }
+}
