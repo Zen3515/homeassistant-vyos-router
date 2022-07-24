@@ -1,5 +1,7 @@
+![logo](https://github.com/zen3515/homeassistant-vyos-router/blob/main/img/logo@2x.png)
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![License](https://img.shields.io/github/license/Vaskivskyi/ha-asusrouter.svg?style=for-the-badge&color=yellow)](LICENSE)
+[![License](https://img.shields.io/github/license/zen3515/homeassistant-vyos-router.svg?style=for-the-badge&color=yellow)](LICENSE)
 ![GitHub all releases](https://img.shields.io/github/downloads/zen3515/homeassistant-vyos-router/total?style=for-the-badge&logo=appveyor)
 
 # homeassistant-vyos-router
@@ -34,7 +36,7 @@ To connect to the device you need to provide the following data:
 - **api_key** the key that you set from VyOS doc `MY-HTTPS-API-PLAINTEXT-KEY`
 - **verify_ssl** whether to use an SSL connection
 - **tracker_interfaces** this is optional, you can use comma `,` to specify multiple interface, for example `eth0,eth1,wlan0`. If you leave it empty, it'll use all interfaces.
-- **detection_time** How long before consider at away or home in seconds.
+- **detection_time** How long before considered away or at home in seconds.
 
 After configured the integration, the device entities will be disabled by default. Find the required mac addresses using the disabled entity list, then activate them as needed.
 
