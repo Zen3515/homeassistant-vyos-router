@@ -150,17 +150,22 @@ class VyOSData:
             (
                 static_mapping_host_detail,
                 (await dhcp_lease_co_routine),
-                (await arp_table_co_routine),
+                # (await arp_table_co_routine),
             ),
         )
         device_list = self.all_devices
+
+        arp_table = await arp_table_co_routine  # key of arp_table is ip
+
+        arp_presence_ip = {table_entry["ip"] for table_entry in arp_table.values() if table_entry.get("arp_state", None) in VyOSApi.PRESENCE_ARP_STATES}
 
         for mac, params in device_list.items():
             if mac not in self.devices:
                 self.devices[mac] = VyOSDevice(mac, self.all_devices.get(mac, {}))
             else:
                 self.devices[mac].update(params=self.all_devices.get(mac, {}))
-            is_active = params.get("arp_state", None) in VyOSApi.PRESENCE_ARP_STATES
+            # is_active = params.get("arp_state", None) in VyOSApi.PRESENCE_ARP_STATES
+            is_active = params.get("ip", None) in arp_presence_ip
             self.devices[mac].update(active=is_active)
 
 

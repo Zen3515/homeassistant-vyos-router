@@ -2,10 +2,13 @@
 Serve as a simple api for VyOS, only support feature for device tracker
 """
 import re
+import logging
 import requests  # used as fallback only
 
 from typing import Any, Callable, Literal, Optional
 from aiohttp import ClientSession
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class VyOSApiError(Exception):
@@ -181,12 +184,11 @@ class VyOSApi:
 
         # TODO: check if we need partial function for the variables
         def filter_arp_entry(arp_entry_dict: dict[str, str]):
-            is_valid = len(arp_entry_dict["mac"]) == 17
+            # is_valid = len(arp_entry_dict["mac"]) == 17 # we don't need to check mac from arp table
             is_presence = arp_entry_dict["arp_state"] in VyOSApi.PRESENCE_ARP_STATES
-            is_valid_interface = (not should_check_interface) or (
-                arp_entry_dict["interface"] in interface
-            )
-            return is_valid and is_presence and is_valid_interface
+            is_valid_interface = (not should_check_interface) or (arp_entry_dict["interface"] in interface)
+            _LOGGER.debug(f"Filtering {arp_entry_dict}\nis_presence={is_presence},is_valid_interface={is_valid_interface}")
+            return is_presence and is_valid_interface
 
         arp_clients: dict[
             str, dict[Literal["ip", "interface", "mac", "arp_state"], str]
@@ -194,7 +196,7 @@ class VyOSApi:
             arp_table_raw,
             delimiter_line_index=1,
             column_names=["ip", "interface", "mac", "arp_state"],
-            key="mac",
+            key="ip",
             filter_func=filter_arp_entry,
         )
 

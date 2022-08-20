@@ -1,7 +1,7 @@
 {
   "domain": "vyos",
   "name": "VyOS Router",
-  "version": "2022.7.1",
+  "version": "2022.8.1",
   "config_flow": true,
   "documentation": "https://www.github.com/zen3515/homeassistant-vyos-router",
   "requirements": [],
