@@ -97,8 +97,8 @@ class VyOSData:
         """Load dictionary using MAC address as key."""
         mac_devices = {}
         for device in devices:
-            if "mac-address" in device:
-                mac = device["mac-address"]
+            if "mac" in device:
+                mac = device["mac"]
                 mac_devices[mac] = device
         return mac_devices
 
@@ -125,7 +125,7 @@ class VyOSData:
         shared_network_name_dict: dict[str, dict[str, Any]]
         subnet_dict: dict[str, dict[str, Any]]
         mapping_detail: dict[
-            Literal["ip-address", "mac-address", "static-mapping-parameters"],
+            Literal["ip-address", "mac", "static-mapping-parameters"],
             Union[str, list[str]],
         ]
         # shared_network_name = Lan
@@ -135,10 +135,10 @@ class VyOSData:
         )["shared-network-name"].items():
             for _subnet_name, subnet_dict in shared_network_name_dict["subnet"].items():
                 for hostname, mapping_detail in subnet_dict["static-mapping"].items():
-                    if "mac-address" not in mapping_detail:
+                    if "mac" not in mapping_detail:
                         continue
                     ip = mapping_detail.get("ip-address", None)
-                    mac = mapping_detail["mac-address"]
+                    mac = mapping_detail["mac"]
                     static_mapping_host_detail[mac] = {
                         "mac": mac,
                         "ip": ip,
