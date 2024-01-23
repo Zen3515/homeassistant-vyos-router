@@ -155,9 +155,25 @@ class VyOSData:
         )
         device_list = self.all_devices
 
-        arp_table = await arp_table_co_routine  # key of arp_table is ip
+        # key of arp_table is ip
+        arp_table = await arp_table_co_routine
 
-        arp_presence_ip = {table_entry["ip"] for table_entry in arp_table.values() if table_entry.get("arp_state", None) in VyOSApi.PRESENCE_ARP_STATES}
+        # in arp table, many ip could have the same mac address #1
+        arp_mac_to_ip: dict[str, str] = {}
+        for table_entry in arp_table.values():
+            arp_mac = table_entry.get("mac", None)
+            arp_ip = table_entry.get("ip", None)
+            if arp_mac is None:
+                continue
+            arp_mac_to_ip[arp_mac] = arp_mac_to_ip.get(arp_mac, None) or arp_ip
+        # Update device_list to add ip address, if possible
+        for mac, params in device_list.items():
+            original_ip = params.get("ip", None)
+            arp_ip = arp_mac_to_ip.get(mac, None)
+            device_list[mac].update({"ip": original_ip or arp_ip})
+
+        arp_presence_ip = {table_entry["ip"] for table_entry in arp_table.values() if table_entry.get("arp_state", None)
+                           in VyOSApi.PRESENCE_ARP_STATES}
 
         for mac, params in device_list.items():
             if mac not in self.devices:
