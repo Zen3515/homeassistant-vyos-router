@@ -34,6 +34,7 @@ To connect to the device you need to provide the following data:
 
 - **url** this include `https://` protocol and port number `:port`, for instance `https://192.168.1.1:11123`
 - **api_key** the key that you set from VyOS doc `MY-HTTPS-API-PLAINTEXT-KEY`
+- **version_dhcp_server** config version of dhcp-server, on vyos-1.4 or lower that doesn't use kea dhcp server, this value is typcally `7`. If you're running vyos-1.5 and above with kea, you can use any number higher than 7. If you wish to know your exact number, you could use this command `cat /config/config.boot | grep -Eo 'dhcp-server@[0-9]*'`
 - **verify_ssl** whether to use an SSL connection
 - **tracker_interfaces** this is optional, you can use comma `,` to specify multiple interface, for example `eth0,eth1,wlan0`. If you leave it empty, it'll use all interfaces.
 - **detection_time** How long before considered away or at home in seconds.

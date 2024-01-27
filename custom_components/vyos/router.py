@@ -6,6 +6,7 @@ from .const import (
     CONF_URL,
     CONF_DETECTION_TIME,
     CONF_TRACKER_INTERFACE,
+    CONF_CONFIG_VERSION_DHCP_SERVER,
     DEFAULT_DETECTION_TIME,
     VyOSDeviceDataType,
 )
@@ -91,6 +92,8 @@ class VyOSData:
         ]
         self.all_devices: dict[str, VyOSDeviceDataType] = {}
         self.devices: dict[str, VyOSDevice] = {}
+        self.conf_mac_name: Literal["mac", "mac-address"]
+        self.load_config_paths()
 
     @staticmethod
     def load_mac(devices: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -106,6 +109,18 @@ class VyOSData:
         """Restore a missing device after restart."""
         device_data = self.all_devices[mac]
         self.devices[mac] = VyOSDevice(mac, device_data)
+
+    def load_config_paths(self) -> None:
+        """
+        Different version of vyos has differnt config path.
+        In this function we check which version to use.
+        """
+        conf = self.config_entry.data
+        dhcp_server_version = conf[CONF_CONFIG_VERSION_DHCP_SERVER]
+        if dhcp_server_version <= 7:
+            self.conf_mac_name = "mac-address"
+        else:
+            self.conf_mac_name = "mac"
 
     async def update_devices(self) -> None:
         """Get list of devices with latest status."""
@@ -135,10 +150,10 @@ class VyOSData:
         )["shared-network-name"].items():
             for _subnet_name, subnet_dict in shared_network_name_dict["subnet"].items():
                 for hostname, mapping_detail in subnet_dict["static-mapping"].items():
-                    if "mac" not in mapping_detail:
+                    if self.conf_mac_name not in mapping_detail:
                         continue
                     ip = mapping_detail.get("ip-address", None)
-                    mac = mapping_detail["mac"]
+                    mac = mapping_detail[self.conf_mac_name]
                     static_mapping_host_detail[mac] = {
                         "mac": mac,
                         "ip": ip,

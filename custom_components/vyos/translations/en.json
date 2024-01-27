@@ -3,9 +3,31 @@
     "step": {
       "user": {
         "title": "Set up VyOS Router",
+        "description": "For **version_dhcp_server**, vyos-version 1.4 and below should use 7\nHowever, you could extract this information from the last line of `/config/config.boot` Or using this command\n```bash\ncat /config/config.boot | grep -Eo 'dhcp-server@[0-9]*'\n```",
         "data": {
           "url": "VyOS API url (needs https:// and port)",
           "api_key": "Api key",
+          "version_dhcp_server": "config version of dhcp-server",
+          "verify_ssl": "Use SSL",
+          "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
+          "detection_time": "Consider home interval (seconds)"
+        }
+      }
+    },
+    "error": {},
+    "abort": {
+      "already_configured": "Already Configured"
+    }
+  },
+  "options": {
+    "step": {
+      "user": {
+        "title": "Edit VyOS Router",
+        "description": "For **version_dhcp_server**, vyos-version 1.4 and below should use 7\nHowever, you could extract this information from the last line of `/config/config.boot` Or using this command\n```bash\ncat /config/config.boot | grep -Eo 'dhcp-server@[0-9]*'\n```",
+        "data": {
+          "url": "VyOS API url (needs https:// and port)",
+          "api_key": "Api key",
+          "version_dhcp_server": "config version of dhcp-server",
           "verify_ssl": "Use SSL",
           "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
           "detection_time": "Consider home interval (seconds)"

@@ -113,11 +113,11 @@ class VyOSApi:
 
         if key is None:
             return cls._parse_table_as_list(
-                table_lines[delimiter_line_index + 1 :], parse_line_func, filter_func
+                table_lines[delimiter_line_index + 1:], parse_line_func, filter_func
             )
         else:
             return cls._parse_table_as_dict(
-                table_lines[delimiter_line_index + 1 :],
+                table_lines[delimiter_line_index + 1:],
                 column_names,
                 key,
                 parse_line_func,

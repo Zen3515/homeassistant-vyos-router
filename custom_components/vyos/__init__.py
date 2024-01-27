@@ -3,9 +3,12 @@
 import logging
 
 from .const import (
+    ENTRIES_VERSION,
     CONF_DETECTION_TIME,
     DOMAIN,
     CONF_TRACKER_INTERFACE,
+    CONF_CONFIG_VERSION_DHCP_SERVER,
+    DEFAULT_CONFIG_VERSION_DHCP_SERVER,
     KEY_COORDINATOR,
     PLATFORMS,
     UPDATE_LISTENER,
@@ -21,6 +24,24 @@ from homeassistant.helpers import aiohttp_client
 from homeassistant.config_entries import ConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
+
+
+async def async_migrate_entry(hass, config_entry: ConfigEntry):
+    """Migrate old entries merging all of them in one."""
+    new_version = ENTRIES_VERSION
+    if config_entry.version == 1:
+        _LOGGER.debug("Migrating config entry from version %s", config_entry.version)
+        new_data = config_entry.data.copy()
+        new_data[CONF_CONFIG_VERSION_DHCP_SERVER] = DEFAULT_CONFIG_VERSION_DHCP_SERVER
+        config_entry.version = new_version
+        hass.config_entries.async_update_entry(config_entry, data=new_data)
+    _LOGGER.info(
+        "Entry %s successfully migrated to version %s.",
+        config_entry.entry_id,
+        new_version,
+    )
+
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
