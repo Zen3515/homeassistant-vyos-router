@@ -7,7 +7,7 @@
         "data": {
           "url": "VyOS API url (needs https:// and port)",
           "api_key": "Api key",
-          "version_dhcp_server": "config version of dhcp-server",
+          "version_dhcp_server": "Config version of dhcp-server",
           "verify_ssl": "Use SSL",
           "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
           "detection_time": "Consider home interval (seconds)"
@@ -27,7 +27,7 @@
         "data": {
           "url": "VyOS API url (needs https:// and port)",
           "api_key": "Api key",
-          "version_dhcp_server": "config version of dhcp-server",
+          "version_dhcp_server": "Config version of dhcp-server",
           "verify_ssl": "Use SSL",
           "tracker_interfaces": "Interface to track arp (use comma without space to specify multiple interfaces)",
           "detection_time": "Consider home interval (seconds)"
