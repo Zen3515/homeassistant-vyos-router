@@ -149,6 +149,9 @@ class VyOSData:
             await static_mapping_co_routine
         )["shared-network-name"].items():
             for _subnet_name, subnet_dict in shared_network_name_dict["subnet"].items():
+                if "static-mapping" not in subnet_dict:
+                    # This subnet doesn't have any static-mapping definition
+                    continue
                 for hostname, mapping_detail in subnet_dict["static-mapping"].items():
                     if self.conf_mac_name not in mapping_detail:
                         continue
