@@ -1,5 +1,8 @@
 {
     "name": "VyOS Router",
     "content_in_root": false,
-    "homeassistant": "2022.7.0"
+    "homeassistant": "2022.7.0",
+    "zip_release": true,
+    "filename": "vyos.zip",
+    "render_readme": true
 }
