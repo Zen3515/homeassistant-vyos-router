@@ -70,7 +70,7 @@ class VyOSApi:
     def _parse_table(
         cls,
         table: str,
-        delimiter_line_index: int = 1,
+        delimiter_line_index: Optional[int] = 1, # Could be none to use the first line instead
         column_names: list[str] = None,
         key: Optional[str] = None,
         filter_func: Optional[Callable[[list[str]], bool]] = None,
@@ -93,7 +93,7 @@ class VyOSApi:
         col_indice = [0]
         start_index = 0
         for col in cls.TABLE_DELIMITER_PATTERN.findall(
-            table_lines[delimiter_line_index]
+            table_lines[delimiter_line_index or 0]
         ):
             start_index += len(col)
             col_indice.append(start_index)
@@ -109,15 +109,15 @@ class VyOSApi:
             return parsed_line
 
         if column_names is None:
-            column_names = parse_line_func(table_lines[delimiter_line_index - 1])
+            column_names = parse_line_func(table_lines[(delimiter_line_index or 1) - 1])
 
         if key is None:
             return cls._parse_table_as_list(
-                table_lines[delimiter_line_index + 1:], parse_line_func, filter_func
+                table_lines[(delimiter_line_index or 0) + 1:], parse_line_func, filter_func
             )
         else:
             return cls._parse_table_as_dict(
-                table_lines[delimiter_line_index + 1:],
+                table_lines[(delimiter_line_index or 0) + 1:],
                 column_names,
                 key,
                 parse_line_func,
@@ -189,33 +189,29 @@ class VyOSApi:
             is_valid_interface = (not should_check_interface) or (arp_entry_dict["interface"] in interface)
             _LOGGER.debug(f"Filtering {arp_entry_dict}\nis_presence={is_presence},is_valid_interface={is_valid_interface}")
             return is_presence and is_valid_interface
+        
+        is_vyos_equuleus_and_lower = "HWtype" in arp_table_raw.strip()[:80] # check if first line has this HWtype
 
-        arp_clients: dict[
-            str, dict[Literal["ip", "interface", "mac", "arp_state"], str]
-        ] = self._parse_table(
-            arp_table_raw,
-            delimiter_line_index=1,
-            column_names=["ip", "interface", "mac", "arp_state"],
-            key="ip",
-            filter_func=filter_arp_entry,
-        )
-
-        # arp_clients = {
-        #     arp_entry[2]
-        #     .lower()
-        #     .strip(): {
-        #         "ip": arp_entry[0],
-        #         "interface": arp_entry[1],
-        #         "mac": arp_entry[2],
-        #         "arp_state": arp_entry[3],
-        #     }
-        #     for table_line in arp_table_raw.splitlines()[2:]
-        #     if (
-        #         (arp_entry := table_line.split())[-1].strip()
-        #         in VyOSApi.PRESENCE_ARP_STATES
-        #     )
-        #     and ((not should_check_interface) or (arp_entry[1].strip() in interface))
-        # }
+        if not is_vyos_equuleus_and_lower:
+            arp_clients: dict[
+                str, dict[Literal["ip", "interface", "mac", "arp_state"], str]
+            ] = self._parse_table(
+                arp_table_raw,
+                delimiter_line_index=1,
+                column_names=["ip", "interface", "mac", "arp_state"],
+                key="ip",
+                filter_func=filter_arp_entry,
+            )
+        else: # vyos 1.3.x and lower
+            arp_clients: dict[
+                str, dict[Literal["ip", "HWtype", "mac", "arp_state", "interface"], str]
+            ] = self._parse_table(
+                arp_table_raw,
+                delimiter_line_index=None,
+                column_names=["ip", "HWtype", "mac", "arp_state", "interface"],
+                key="ip",
+                filter_func=filter_arp_entry,
+            )
 
         return arp_clients
 
