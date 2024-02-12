@@ -30,7 +30,7 @@ class VyOSApi:
     """
 
     PRESENCE_ARP_STATES = frozenset({"REACHABLE", "STALE", "DELAY", "C", "M", "P"})
-    TABLE_DELIMITER_PATTERN = re.compile("[^\s]+\s*")
+    TABLE_DELIMITER_PATTERN = re.compile("[^\s]+\s{0,1}[^\s]*\s*")
 
     def __init__(
         self,
@@ -70,7 +70,7 @@ class VyOSApi:
     def _parse_table(
         cls,
         table: str,
-        delimiter_line_index: Optional[int] = 1, # Could be none to use the first line instead
+        delimiter_line_index: Optional[int] = 1,  # Could be none to use the first line instead
         column_names: list[str] = None,
         key: Optional[str] = None,
         filter_func: Optional[Callable[[list[str]], bool]] = None,
@@ -189,8 +189,8 @@ class VyOSApi:
             is_valid_interface = (not should_check_interface) or (arp_entry_dict["interface"] in interface)
             _LOGGER.debug(f"Filtering {arp_entry_dict}\nis_presence={is_presence},is_valid_interface={is_valid_interface}")
             return is_presence and is_valid_interface
-        
-        is_vyos_equuleus_and_lower = "HWtype" in arp_table_raw.strip()[:80] # check if first line has this HWtype
+
+        is_vyos_equuleus_and_lower = "HWtype" in arp_table_raw.strip()[:80]  # check if first line has this HWtype
 
         if not is_vyos_equuleus_and_lower:
             arp_clients: dict[
@@ -202,7 +202,7 @@ class VyOSApi:
                 key="ip",
                 filter_func=filter_arp_entry,
             )
-        else: # vyos 1.3.x and lower
+        else:  # vyos 1.3.x and lower
             arp_clients: dict[
                 str, dict[Literal["ip", "HWtype", "mac", "arp_state", "interface"], str]
             ] = self._parse_table(
