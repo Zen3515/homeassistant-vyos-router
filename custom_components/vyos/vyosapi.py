@@ -30,7 +30,7 @@ class VyOSApi:
     """
 
     PRESENCE_ARP_STATES = frozenset({"REACHABLE", "STALE", "DELAY", "C", "M", "P"})
-    TABLE_DELIMITER_PATTERN = re.compile("[^\s]+\s{0,1}[^\s]*\s*")
+    TABLE_DELIMITER_PATTERN = re.compile(r"[^\s]+\s{0,1}[^\s]*\s*")
 
     def __init__(
         self,
