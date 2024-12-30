@@ -17,7 +17,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.device_tracker.const import (
     DOMAIN as DEVICE_TRACKER,
-    SOURCE_TYPE_ROUTER,
+    SourceType,
 )
 from homeassistant.components.device_tracker.config_entry import ScannerEntity
 from homeassistant.config_entries import ConfigEntry
@@ -196,7 +196,7 @@ class VyOSApiDataUpdateCoordinatorTracker(
     @property
     def source_type(self) -> str:
         """Return the source type of the client."""
-        return SOURCE_TYPE_ROUTER
+        return SourceType.ROUTER
 
     @property
     def hostname(self) -> str:
